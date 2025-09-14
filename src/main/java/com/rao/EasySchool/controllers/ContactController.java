@@ -2,17 +2,19 @@ package com.rao.EasySchool.controllers;
 
 import com.rao.EasySchool.model.Contact;
 import com.rao.EasySchool.service.ContactService;
+import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
-
-import java.util.logging.Logger;
 
 @Controller
+@Slf4j
 public class ContactController {
-    Logger log = Logger.getLogger(ContactController.class.getName());
 
     private final ContactService contactService;
 
@@ -22,18 +24,18 @@ public class ContactController {
     }
 
     @RequestMapping("/contact")
-    public String displayContactPage() {
+    public String displayContactPage(Model model) {
+        model.addAttribute("contact", new Contact());
         return "contact.html";
     }
 
     @RequestMapping(value = "/saveMsg", method = RequestMethod.POST)
-    public ModelAndView saveMessage(Contact contact) {
-        log.info("name: " + contact.getName());
-        log.info("mobileNum: " + contact.getMobileNum());
-        log.info("subject: " + contact.getSubject());
-        log.info("email: " + contact.getEmail());
-        log.info("message: " + contact.getMessage());
+    public String saveMessage(@Valid @ModelAttribute Contact contact, Errors errors) {
+        if (errors.hasErrors()) {
+            log.error("Contact from validation failed due to: {}", errors);
+            return "contact.html";
+        }
         contactService.saveMessageDetails(contact);
-        return new ModelAndView("redirect:/contact");
+        return "redirect:/contact";
     }
 }

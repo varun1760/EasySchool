@@ -2,9 +2,9 @@ package com.rao.EasySchool.model;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.Getter;
+import lombok.Data;
 
-@Getter
+@Data
 public class Holiday {
 
     public enum Type{
@@ -16,12 +16,6 @@ public class Holiday {
     private final String day;
     private final String reason;
     private final Type type;
-
-    public Holiday(String day, String reason, Type type) {
-        this.day = day;
-        this.reason = reason;
-        this.type = type;
-    }
 
     @Override
     public String toString() {
