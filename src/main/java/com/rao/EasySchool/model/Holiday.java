@@ -11,19 +11,19 @@ public class Holiday {
         FESTIVAL, FEDERAL
     }
 
-    private static final ObjectMapper mapper = new ObjectMapper();
+//    private static final ObjectMapper mapper = new ObjectMapper();
 
-    private final String day;
-    private final String reason;
-    private final Type type;
+    private String day;
+    private String reason;
+    private Type type;
 
-    @Override
-    public String toString() {
-        try {
-            return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(this);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-    }
+//    @Override
+//    public String toString() {
+//        try {
+//            return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(this);
+//        } catch (JsonProcessingException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
 
 }
