@@ -6,8 +6,8 @@ import com.rao.EasySchool.repository.ContactRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -22,24 +22,26 @@ public class ContactService {
     public boolean saveMessageDetails(Contact contact) {
         boolean isSaved = false;
         contact.setStatus(ContactConstant.OPEN);
-        contact.setCreatedAt(LocalDateTime.now());
-        contact.setCreatedBy(ContactConstant.ANONYMOUS);
         log.info(contact.toString());
-        int saveMsg = contactRepository.saveContactMsg(contact, true);
-        if (saveMsg > 0) {
+        Contact savedContact = contactRepository.save(contact);
+        if (savedContact.getContactId() > 0) {
             isSaved = true;
         }
         return isSaved;
     }
 
     public List<Contact> findMessageWithOpenStatus() {
-        return contactRepository.findMessagesWithStatus(ContactConstant.OPEN);
+        return contactRepository.findByStatus(ContactConstant.OPEN);
     }
 
-    public boolean updateMsgStatus(int contactId, String updatedBy){
+    public boolean updateMsgStatus(int contactId){
         boolean isUpdated = false;
-        int result = contactRepository.updateMsgStatus(contactId, ContactConstant.CLOSE, updatedBy);
-        if (result > 0) {
+        Optional<Contact> contactData = contactRepository.findById(contactId);
+        contactData.ifPresent(contact -> {
+            contact.setStatus(ContactConstant.CLOSE);
+        });
+        Contact updateContact = contactRepository.save(contactData.get());
+        if (updateContact.getUpdatedBy() != null) {
             isUpdated = true;
         }
         return isUpdated;
