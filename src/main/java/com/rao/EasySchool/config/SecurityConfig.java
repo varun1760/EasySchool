@@ -19,6 +19,7 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.ignoringRequestMatchers("/saveMsg")
+                        .ignoringRequestMatchers("/public/**")
 //                .ignoringRequestMatchers(PathRequest.toH2Console())
         );
         http.authorizeHttpRequests(authorize ->
@@ -34,6 +35,7 @@ public class SecurityConfig {
                         .requestMatchers("/login").permitAll()
                         .requestMatchers("/logout").permitAll()
                         .requestMatchers("/assets/**").permitAll()
+                        .requestMatchers("/public/**").permitAll()
 //                        .requestMatchers(PathRequest.toH2Console()).permitAll()
         );
 //        http.headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable));
