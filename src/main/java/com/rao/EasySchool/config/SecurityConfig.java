@@ -24,8 +24,10 @@ public class SecurityConfig {
         );
         http.authorizeHttpRequests(authorize ->
                 authorize.requestMatchers("/dashboard").authenticated()
-                        .requestMatchers("/displayMessages").hasRole("ADMIN")
+                        .requestMatchers("/displayMessages/**").hasRole("ADMIN")
                         .requestMatchers("/closeMsg/**").hasRole("ADMIN")
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/student/**").hasRole("STUDENT")
                         .requestMatchers("/displayProfile").authenticated()
                         .requestMatchers("/updateProfile").authenticated()
                         .requestMatchers("/", "/home").permitAll()
