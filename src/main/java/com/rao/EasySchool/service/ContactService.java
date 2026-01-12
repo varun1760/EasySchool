@@ -50,12 +50,8 @@ public class ContactService {
 
     public boolean updateMsgStatus(int contactId){
         boolean isUpdated = false;
-        Optional<Contact> contactData = contactRepository.findById(contactId);
-        contactData.ifPresent(contact -> {
-            contact.setStatus(GlobalConstant.CLOSE);
-        });
-        Contact updateContact = contactRepository.save(contactData.get());
-        if (updateContact.getUpdatedBy() != null) {
+        int rows = contactRepository.updateMsgStatusNative(GlobalConstant.CLOSE, contactId);
+        if(rows > 0) {
             isUpdated = true;
         }
         return isUpdated;
